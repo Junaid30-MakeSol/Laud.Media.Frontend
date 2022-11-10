@@ -8,9 +8,17 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BooleanPipe } from '../pipes/boolean.pipe';
+import { ConfirmService } from '../@shared/confirm-dialog/confirm.service';
+import { ConfirmDialogComponent } from '../@shared/confirm-dialog/confirm-dialog.component';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @NgModule({
   imports: [
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
     CurrencyRoutingModule,
     UiSwitchModule,
     FontAwesomeModule,
@@ -21,5 +29,11 @@ import { BooleanPipe } from '../pipes/boolean.pipe';
   ],
   declarations: [CurrencyComponent, CurrencyListComponent, BooleanPipe],
   exports: [CurrencyListComponent],
+  providers: [
+    ConfirmService,
+    ToastrService
+
+  ],
+  entryComponents: [ConfirmDialogComponent],
 })
 export class CurrencyModule {}

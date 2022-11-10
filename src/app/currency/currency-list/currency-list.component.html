@@ -35,12 +35,12 @@
             <td>
               {{ currency.status | booleanFilter }}
             </td>
-            <!-- <td class="text-center">
-              <a (click)="deletecurrency($event, currency.GuId)">
+            <td class="text-center">
+              <a (click)="deleteCurrency($event, currency.id)">
                 <i class="fa fa-trash-alt"> </i>
                 <fa-icon [icon]="delete" style="color: #db0000;"></fa-icon>
               </a>
-            </td> -->
+            </td>
           </tr>
         </tbody>
       </table>

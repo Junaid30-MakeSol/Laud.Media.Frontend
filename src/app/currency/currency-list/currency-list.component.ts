@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { currencyService } from '../currency.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { ConfirmService } from 'src/app/@shared/confirm-dialog/confirm.service';
+import { ToastrService } from 'ngx-toastr';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-currency-list',
@@ -8,37 +11,19 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
   styleUrls: ['./currency-list.component.scss'],
 })
 export class CurrencyListComponent implements OnInit {
-  formGroup!: FormGroup;
-  results: any;
   isLoading!: boolean;
   currencies: any;
-  page = 1;
-  total!: number;
-  itemsPerPage = 20;
-  totalPages = 1;
-  SearchTerm: any;
-  // delete = faTimes;
-  userModelRequest = {
-    CurrentPage: 1,
-    PageSize: 20,
-    SearchTerm: '',
-    SortBy: 'Name',
-    SortOrder: 'ASC',
-  };
-
-  tempRequestModel: any;
-  searchForm!: FormGroup;
+  delete = faTimes;
   constructor(
     private _CompanyService: currencyService,
     private fb: FormBuilder,
+    private alertService: ConfirmService,
+    private toastr: ToastrService,
+
   ) {
-    this.tempRequestModel = this._CompanyService.requestBody;
   }
 
   ngOnInit() {
-    this.searchForm = this.fb.group({
-      search: new FormControl(''),
-    });
     this.searchCurrencies();
     this.isLoading = true;
   }
@@ -50,28 +35,25 @@ export class CurrencyListComponent implements OnInit {
     });
   }
 
- 
-
   public currencyCreated() {
     this.searchCurrencies();
   }
-
 
   currencyChange(obj: any) {
     const index = this.currencies.findIndex((x: any) => x.Id === obj.Id);
     this.currencies[index] = obj;
   }
 
-  // deletecurrency(e: any, id: number) {
-  //   e.stopPropagation();
-  //   e.preventDefault();
-  //   this.alertService.confirm().then((result) => {
-  //     if (result.value) {
-  //       this._CompanyService.delete(id).subscribe(() => {
-  //         this.toastr.success('Kurset er slettet', 'Slett');
-  //         this.searchcurrencys(1);
-  //       });
-  //     }
-  //   });
-  // }
+  deleteCurrency(e: any, id: number) {
+    e.stopPropagation();
+    e.preventDefault();
+    this.alertService.confirm().then((result: any) => {
+      if (result.value) {
+        this._CompanyService.delete(id).subscribe(() => {
+          this.toastr.success('Currency er slettet', 'Slett');
+          this.searchCurrencies();
+        });
+      }
+    });
+  }
 }
